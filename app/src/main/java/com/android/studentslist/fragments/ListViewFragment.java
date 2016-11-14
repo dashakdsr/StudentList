@@ -1,0 +1,29 @@
+package com.android.studentslist.fragments;
+
+import android.app.Fragment;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.android.studentslist.R;
+import com.android.studentslist.StudentsInfo;
+import com.android.studentslist.adapters.ListStudentsAdapter;
+
+public class ListViewFragment extends Fragment {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.fragment_list_view, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("List View");
+        ((ListView)view).setAdapter(new ListStudentsAdapter(getActivity(), StudentsInfo.data));
+    }
+}
