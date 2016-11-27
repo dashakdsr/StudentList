@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.android.studentslist.BroadcastToaster;
 import com.android.studentslist.R;
 import com.android.studentslist.fragments.ListViewFragment;
+import com.android.studentslist.fragments.ContactsFragment;
 import com.android.studentslist.fragments.RecycleViewFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_main, new ListViewFragment())
                     .commit();
         }
@@ -48,13 +49,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_list:
-                getFragmentManager().beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.activity_main, new ListViewFragment())
                         .commit();
                 return true;
             case R.id.menu_recycle:
-                getFragmentManager().beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.activity_main, new RecycleViewFragment())
+                        .commit();
+                return true;
+	    case R.id.contacts_menu:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.activity_main, new ContactsFragment())
                         .commit();
                 return true;
             default:

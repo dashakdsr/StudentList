@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.android.studentslist.BroadcastToaster;
 import com.android.studentslist.R;
+import com.android.studentslist.api.GitService;
+import com.android.studentslist.api.GitUser;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -29,12 +31,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GitActivity extends AppCompatActivity implements View.OnClickListener {
     final private String LOG_SPAWNER = getClass().getSimpleName();
 
     final BroadcastToaster broadcastToaster = new BroadcastToaster();
-    String user_id;
     static final int ACTION_REQUEST_GALLERY = 0;
     static final int ACTION_REQUEST_CAMERA = 1;
 
@@ -42,10 +46,28 @@ public class GitActivity extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.git_activity);
-        String path = getIntent().getData().getPath();
-        user_id = path.substring(1, path.length());
-        new GitActivity.FetchGITInfo().execute();
         findViewById(R.id.image_git).setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        String path = getIntent().getData().getPath();
+        Call<GitUser> userCall = new GitService().api.getUserInfo(path.substring(1, path.length()));
+        userCall.enqueue(new Callback<GitUser>() {
+            @Override
+            public void onResponse(Call<GitUser> call, Response<GitUser> response) {
+                GitUser user = response.body();
+                Picasso.with(getBaseContext()).load(user.getImageUrl()).into((ImageView) findViewById(R.id.image_git));
+                ((TextView) findViewById(R.id.text_git)).setText(user.getName());
+                ((TextView) findViewById((R.id.login_git))).setText("R.id.".concat(user.getLogin()));
+            }
+
+            @Override
+            public void onFailure(Call<GitUser> call, Throwable t) {
+            }
+        });
     }
 
     @Override
@@ -106,65 +128,4 @@ public class GitActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public class FetchGITInfo extends AsyncTask<Void, Void, String[]> {
-        final private String LOG_SPAWNER = FetchGITInfo.class.getSimpleName();
-
-        @Override
-        protected String[] doInBackground(Void... voids) {
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            try {
-                urlConnection = (HttpURLConnection)
-                        new URL(Uri.parse("https://api.github.com/users").buildUpon()
-                                .appendPath(user_id)
-                                .build().toString()).openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-                StringBuilder buffer = new StringBuilder();
-                reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-                if (buffer.length() == 0) {
-                    return null;
-                }
-                JSONObject InfoJSONObj = new JSONObject(buffer.toString());
-                return new String[]{InfoJSONObj.getString("avatar_url"), InfoJSONObj.getString("name")};
-            } catch (IOException e)
-
-            {
-                Log.e(LOG_SPAWNER, "error", e);
-                return null;
-            } catch (JSONException e)
-
-            {
-                Log.e(LOG_SPAWNER, "error", e);
-            } finally
-
-            {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        Log.e(LOG_SPAWNER, "error", e);
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            super.onPostExecute(result);
-            Picasso.with(getBaseContext()).load(result[0]).into((ImageView) findViewById(R.id.image_git));
-            if (!result[1].equals("null")) {
-                ((TextView) findViewById(R.id.text_git)).setText(result[1]);
-            }
-            ((TextView) findViewById((R.id.login_git))).setText("@".concat(user_id));
-        }
-    }
 }
