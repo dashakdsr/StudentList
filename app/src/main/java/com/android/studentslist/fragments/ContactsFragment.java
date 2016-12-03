@@ -26,19 +26,15 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.contacts_fragment, container, false);
+        return inflater.inflate(R.layout.add_contact_fragment, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Contacts");
-        contactsAdapter = new ContactsAdapter(getActivity(), null, false);
-        ((ListView) view).setAdapter(contactsAdapter);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        getActivity().setTitle("Contacts");
+        contactsAdapter = new ContactsAdapter(getActivity(), null, false);
+        ((ListView) getActivity().findViewById(R.id.contancts_view)).setAdapter(contactsAdapter);
         getLoaderManager().initLoader(CONTACTS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }

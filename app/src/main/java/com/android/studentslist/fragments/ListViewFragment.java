@@ -21,9 +21,11 @@ public class ListViewFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getActivity().setTitle("List View");
-        ((ListView)view).setAdapter(new ListStudentsAdapter(getActivity(), StudentsInfo.data));
+        ((ListView) getActivity().findViewById(R.id.list_view)).setAdapter(new ListStudentsAdapter(getActivity(), StudentsInfo.data));
     }
+
+
 }

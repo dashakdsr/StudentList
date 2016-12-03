@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.android.studentslist.BroadcastToaster;
 import com.android.studentslist.R;
+import com.android.studentslist.fragments.AddContactFragment;
 import com.android.studentslist.fragments.ListViewFragment;
 import com.android.studentslist.fragments.ContactsFragment;
 import com.android.studentslist.fragments.RecycleViewFragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.contact_menu, menu);
         return true;
     }
 
@@ -58,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.activity_main, new RecycleViewFragment())
                         .commit();
                 return true;
-	    case R.id.contacts_menu:
+            case R.id.contacts_menu:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.activity_main, new ContactsFragment())
                         .commit();
+                return true;
+            case R.id.contact_item:
+                new AddContactFragment().show(getSupportFragmentManager(), null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

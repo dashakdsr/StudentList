@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.android.studentslist"
         minSdkVersion 10
@@ -17,7 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         buildTypes.each {
-            it.buildConfigField 'String', 'G_API_KEY', "\"AIzaSyBp-tA3evXgQxONptPyq8rTvTDPHXNoFJY\""
+            it.buildConfigField 'String', 'G_API_KEY', "\"AIzaSyAmdtvf_KmMW7fUxNch54Z3chzQPD2wD4A\""
         }
     }
     return true;
