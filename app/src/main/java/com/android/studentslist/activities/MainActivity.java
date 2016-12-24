@@ -2,20 +2,22 @@ package com.android.studentslist.activities;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.IntentFilter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.studentslist.BroadcastToaster;
 import com.android.studentslist.R;
 import com.android.studentslist.fragments.AddContactFragment;
-import com.android.studentslist.fragments.ListViewFragment;
 import com.android.studentslist.fragments.ContactsFragment;
+import com.android.studentslist.fragments.ListViewFragment;
 import com.android.studentslist.fragments.RecycleViewFragment;
 
 public class MainActivity extends AppCompatActivity {
     BroadcastToaster broadcastToaster = new BroadcastToaster();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +28,13 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.activity_main, new ListViewFragment())
                     .commit();
         }
+
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         this.unregisterReceiver(broadcastToaster);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -14,14 +14,24 @@ import com.android.studentslist.activities.GPlusActivity;
 import com.android.studentslist.activities.GitActivity;
 import com.android.studentslist.entities.Student;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.RealmResults;
+
 public class RecycleStudentAdapter extends RecyclerView.Adapter<RecycleStudentAdapter.StudentHolder> {
-    private Student[] students;
+    private List<Student> students;
     private final Context parent_context;
 
-    public RecycleStudentAdapter(Context context, Student[] students) {
+    public RecycleStudentAdapter(RealmResults<Student> students, Context context) {
         this.students = students;
         this.parent_context = context;
+    }
 
+    public void setFilter(ArrayList<Student> newList) {
+        students = new ArrayList<>();
+        students.addAll(newList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -32,14 +42,12 @@ public class RecycleStudentAdapter extends RecyclerView.Adapter<RecycleStudentAd
 
     @Override
     public void onBindViewHolder(StudentHolder holder, int position) {
-        holder.textView.setText(students[position].getName());
-
-
+        holder.textView.setText(students.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return students.length;
+        return students.size();
     }
 
     class StudentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -54,7 +62,7 @@ public class RecycleStudentAdapter extends RecyclerView.Adapter<RecycleStudentAd
 
         @Override
         public void onClick(View view) {
-            Student student = students[getAdapterPosition()];
+            Student student = students.get(getAdapterPosition());
             switch (view.getId()) {
                 case R.id.list_item_layout: {
                     Intent intent = new Intent(parent_context, GPlusActivity.class)

@@ -70,6 +70,8 @@ public class GitActivity extends AppCompatActivity implements View.OnClickListen
         });
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();

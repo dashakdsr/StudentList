@@ -1,10 +1,14 @@
 package com.android.studentslist.entities;
 
-public class Student {
-    private final String name, gPlusId, gitId;
+import io.realm.RealmObject;
 
-    public Student(String name, String gPlusId, String gitId)
-    {
+public class Student extends RealmObject {
+    private String name, gPlusId, gitId;
+
+    public Student() {
+    }
+
+    public Student(String name, String gPlusId, String gitId) {
         this.name = name;
         this.gPlusId = gPlusId;
         this.gitId = gitId;
